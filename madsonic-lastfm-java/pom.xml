@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.sourceforge.subsonic</groupId>
+		<artifactId>madsonic</artifactId>
+		<version>5.0</version>
+	</parent>
+
+	<groupId>net.sourceforge.subsonic</groupId>
+	<artifactId>madsonic-lastfm-java</artifactId>
+	<version>5.0</version>
+	<packaging>jar</packaging>
+	<name>Madsonic Last.fm bindings</name>
+	<description>Java bindings for the Last.fm webservice API</description>
+    <url>https://github.com/madmarty/lastfm-java</url>
+
+	<licenses>
+		<license>
+			<name>The BSD 2-Clause License</name>
+			<url>http://opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+    <scm>
+        <url>https://github.com/madmarty/lastfm-java</url>
+        <connection>scm:git:git://github.com/madmarty/lastfm-java.git</connection>
+        <developerConnection>scm:git:git@github.com:madmarty/lastfm-java.git</developerConnection>
+    </scm>		
+	
+	<developers>
+		<developer>
+			<name>Madevil</name>
+			<email>madevil@madsonic.org</email>
+		</developer>
+	</developers>
+</project>
