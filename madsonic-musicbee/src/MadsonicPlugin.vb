@@ -177,10 +177,10 @@ Public Class Plugin
 
     Private Class Madsonic
         Public Shared Host As String = "localhost"
-        Public Shared Port As String = "88"
+        Public Shared Port As String = "4040"
         Public Shared BasePath As String = "/"
         Public Shared Username As String = "admin"
-        Public Shared Password As String = "admin$"
+        Public Shared Password As String = "admin"
         Public Shared Transcode As Boolean = False
         Public Shared IsInitialised As Boolean = False
         Public Shared SettingsUrl As String
