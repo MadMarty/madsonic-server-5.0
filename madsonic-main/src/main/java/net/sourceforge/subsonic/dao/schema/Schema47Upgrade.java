@@ -105,30 +105,30 @@ public class Schema47Upgrade extends Schema {
 			}		
 			
 
-		// Update to new Version System
-        if (template.queryForInt("select count(*) from version where version = 21") == 1) {
-            template.execute("delete from version where version= 21");
+//		 Update to new Version System
+//         if (template.queryForInt("select count(*) from version where version = 21") == 1) {
+//             template.execute("delete from version where version= 21");
 
-        if (template.queryForInt("select count(*) from version where version = 31") == 1) {
-            template.execute("update version set version = 101 where version= 31");}
-			
-        if (template.queryForInt("select count(*) from version where version = 32") == 1) {
-            template.execute("update version set version = 102 where version= 32");}
-
-        if (template.queryForInt("select count(*) from version where version = 33") == 1) {
-            template.execute("update version set version = 103 where version= 33");}
-
-        if (template.queryForInt("select count(*) from version where version = 34") == 1) {
-            template.execute("update version set version = 104 where version= 34");}
-			
-        if (template.queryForInt("select count(*) from version where version = 35") == 1) {
-            template.execute("update version set version = 105 where version= 35");}
-
-        if (template.queryForInt("select count(*) from version where version = 36") == 1) {
-            template.execute("update version set version = 106 where version= 36");}
-
-			LOG.info("Updating database schema to new Version System.");
-        }
+//        if (template.queryForInt("select count(*) from version where version = 31") == 1) {
+//            template.execute("update version set version = 101 where version= 31");}
+//			
+//        if (template.queryForInt("select count(*) from version where version = 32") == 1) {
+//            template.execute("update version set version = 102 where version= 32");}
+//
+//        if (template.queryForInt("select count(*) from version where version = 33") == 1) {
+//            template.execute("update version set version = 103 where version= 33");}
+//
+//        if (template.queryForInt("select count(*) from version where version = 34") == 1) {
+//            template.execute("update version set version = 104 where version= 34");}
+//			
+//        if (template.queryForInt("select count(*) from version where version = 35") == 1) {
+//            template.execute("update version set version = 105 where version= 35");}
+//
+//        if (template.queryForInt("select count(*) from version where version = 36") == 1) {
+//            template.execute("update version set version = 106 where version= 36");}
+//
+//			LOG.info("Updating database schema to new Version System.");
+//        }
 			
     }
 }

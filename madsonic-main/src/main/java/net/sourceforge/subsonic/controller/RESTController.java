@@ -1214,7 +1214,7 @@ public class RESTController extends MultiActionController {
             attributes.add("title", mediaFile.getName()); 
             attributes.add("album", parent.getAlbumSetName());
         }
-        
+
         attributes.add("artist", mediaFile.getArtist());
         attributes.add("isDir", mediaFile.isDirectory());
         attributes.add("coverArt", findCoverArt(mediaFile, parent));

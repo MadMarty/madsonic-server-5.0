@@ -227,6 +227,5 @@ public class Album {
 
 	public void setRating(int round) {
 		// TODO Auto-generated method stub
-		
 	}
 }
