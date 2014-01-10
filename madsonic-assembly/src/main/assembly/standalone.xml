@@ -1,0 +1,44 @@
+<!-- Defines the set of files that should be included in the standalone distribution. -->
+
+<assembly>
+    <id>standalone</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>../madsonic-main</directory>
+            <outputDirectory/>
+            <includes>
+                <include>README.TXT</include>
+                <include>LICENSE.TXT</include>
+                <include>Getting Started.html</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>../madsonic-main/target</directory>
+            <outputDirectory/>
+            <includes>
+                <include>madsonic.war</include>
+            </includes>
+        </fileSet>
+          <fileSet>
+            <directory>../madsonic-booter/src/main/script</directory>
+            <outputDirectory/>
+            <includes>
+                <include>madsonic.sh</include>
+                <include>madsonic.bat</include>
+            </includes>
+            <fileMode>0777</fileMode>
+        </fileSet>
+    </fileSets>
+	<files>
+	<file>
+		<source>../madsonic-booter/target/madsonic-booter-jar-with-dependencies.jar</source>
+		<outputDirectory/>
+		<destName>madsonic-booter.jar</destName>
+		<fileMode>0777</fileMode>
+	</file>
+</files>
+</assembly>

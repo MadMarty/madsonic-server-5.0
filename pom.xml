@@ -1,0 +1,148 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.sourceforge.subsonic</groupId>
+    <artifactId>madsonic</artifactId>
+    <version>5.0</version>
+    <name>Madsonic</name>
+    <packaging>pom</packaging>
+    <inceptionYear>2013</inceptionYear>
+
+    <properties>
+        <failOnDependencyWarning>false</failOnDependencyWarning>
+        <project.build.sourceEncoding>iso-8859-1</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>local1</id>
+            <name>Local Repository 1</name>
+            <url>file:repo</url>
+        </repository>
+        <repository>
+            <id>local2</id>
+            <name>Local Repository 2</name>
+            <url>file:../repo</url>
+        </repository>
+        <repository>
+            <id>java_net</id>
+            <name>download.java.net</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>teleal</id>
+            <name>teleal</name>
+            <url>http://teleal.org/m2</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>Codehaus Repository</id>
+            <url>http://repository.codehaus.org/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <ciManagement>
+        <system>continuum</system>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <configuration>
+                    <address>madevil@madsonic.org</address>
+                </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+
+    <developers>
+        <developer>
+            <name>Madevil</name>
+            <email>madevil@madsonic.org</email>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>madsonic-main</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>full</id>
+            <modules>
+                <module>madsonic-booter</module>
+                <module>madsonic-lastfm-java</module>
+                <module>madsonic-installer-windows</module>
+            </modules>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.5.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.1</version>
+                </plugin>
+            </plugins>
+    </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>ISO-8859-1</encoding>
+                    <verbose>false</verbose>
+                    <compilerVersion>1.6</compilerVersion>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.5.1</version>
+                <executions>
+                    <execution>
+                        <id>analyze</id>
+                        <goals>
+                            <goal>analyze-only</goal>
+                        </goals>
+                        <configuration>
+                            <failOnWarning>${failOnDependencyWarning}</failOnWarning>
+                            <ignoreNonCompile>true</ignoreNonCompile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

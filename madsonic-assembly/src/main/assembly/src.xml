@@ -1,0 +1,149 @@
+<!-- Defines the set of files that should be included in the source distribution. -->
+
+<assembly>
+    <id>src</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+
+        <fileSet>
+            <directory>..</directory>
+            <includes>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory></outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>../repo</directory>
+            <outputDirectory>repo</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>../madsonic-main</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+                <include>target/classes/build_number.txt</include>
+                <include>LICENSE.TXT</include>
+                <include>README.TXT</include>
+                <include>Getting Started.html</include>
+            </includes>
+            <outputDirectory>madsonic-main</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>../madsonic-booter</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-booter</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>../madsonic-installer-windows</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-installer-windows</outputDirectory>
+        </fileSet>
+
+        <fileSet>
+            <directory>../madsonic-installer-windows-x64</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-installer-windows-x64</outputDirectory>
+        </fileSet>
+		
+        <fileSet>
+            <directory>../madsonic-installer-debian</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-installer-debian</outputDirectory>
+        </fileSet>
+
+		<fileSet>
+            <directory>../madsonic-installer-rpm</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-installer-rpm</outputDirectory>
+        </fileSet>
+		
+		<fileSet>
+            <directory>../madsonic-installer-mac</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-installer-mac</outputDirectory>
+        </fileSet>
+
+		<fileSet>
+            <directory>../madsonic-lastfm-java</directory>
+             <includes>
+                <include>src/**</include>
+                <include>pom.xml</include>
+            </includes>
+            <outputDirectory>madsonic-lastfm-java</outputDirectory>
+        </fileSet>
+
+		<fileSet>
+            <directory>../madsonic-transcode</directory>
+             <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>madsonic-transcode</outputDirectory>
+        </fileSet>
+
+		<fileSet>
+            <directory>../madsonic-transcode-x64</directory>
+             <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>madsonic-transcode-x64</outputDirectory>
+        </fileSet>
+
+		<fileSet>
+            <directory>../madsonic-artistInfo</directory>
+             <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>madsonic-artistInfo</outputDirectory>
+        </fileSet>
+
+		<fileSet>
+            <directory>../madsonic-musicbee</directory>
+             <includes>
+				<include>src/**</include>
+            </includes>
+            <excludes>
+				<exclude>src/bin/**</exclude>
+				<exclude>src/obj/**</exclude>
+            </excludes>
+            <outputDirectory>madsonic-musicbee</outputDirectory>
+        </fileSet>
+	
+		<fileSet>
+            <directory>../madsonic-xbmc</directory>
+             <includes>
+				<include>**</include>
+            </includes>
+            <excludes>
+				<exclude>*.pyc</exclude>
+				<exclude>*.zip</exclude>
+            </excludes>
+            <outputDirectory>madsonic-xbmc</outputDirectory>
+        </fileSet>
+		
+    </fileSets>
+</assembly>
