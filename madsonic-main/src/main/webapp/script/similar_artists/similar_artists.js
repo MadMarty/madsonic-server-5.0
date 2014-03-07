@@ -277,7 +277,7 @@
 	     * Get similar artists config
 	     */
 		// Similar artists server
-	    var url = 'http://moquanc.at.ifi.uio.no/ArtistInfo/jsonp.php';
+	    var url = '//localhost/ArtistInfo/jsonp.php';
 		
 		// How many seconds between each retry
 	    var retry = 5;

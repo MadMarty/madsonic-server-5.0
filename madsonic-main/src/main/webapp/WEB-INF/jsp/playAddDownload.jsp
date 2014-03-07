@@ -44,7 +44,7 @@ PARAMETERS
 		<c:if test="${param.asTable}"></td><td></c:if>				
         </c:when>
         <c:otherwise>
-            <a href="javascript:void(0)" onclick="parent.playQueue.onPlay(${param.id});">
+            <a href="#" onclick="parent.playQueue.onPlay(${param.id}); return false;">
 			<img src="<spring:theme code="playImage"/>" alt="<fmt:message key="common.play"/>" title="<fmt:message key="common.play"/>"></a>
 		<c:if test="${param.asTable}"></td><td></c:if>
 		<c:if test="${empty param.playAddEnabled or param.playAddEnabled}">

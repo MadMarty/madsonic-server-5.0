@@ -96,8 +96,8 @@
                     $("#artist" + id).html(truncate(song.artist));
                     $("#artist" + id).attr("title", song.artist);
                 }
-                if ($("#duration" + id)) {
-                    $("#duration" + id).html(song.durationAsString);
+                if ($("#songDuration" + id)) {
+                    $("#songDuration" + id).html(song.durationAsString);
                 }
 
                 $("#pattern" + id).addClass((i % 2 == 0) ? "bgcolor2" : "bgcolor1");
@@ -218,7 +218,7 @@
         <td style="padding-right:1.25em"><span id="title">Title</span></td>
         <td style="padding-right:1.25em"><a id="albumUrl" target="main"><span id="album" class="detail">Album</span></a></td>
         <td style="padding-right:1.25em"><span id="artist" class="detail">Artist</span></td>
-        <td style="padding-right:1.25em;text-align:right;"><span id="duration" class="detail">Duration</span></td>
+        <td style="padding-right:1.25em;text-align:right;"><span id="songDuration" class="detail">Duration</span></td>
 
 
     </tr>

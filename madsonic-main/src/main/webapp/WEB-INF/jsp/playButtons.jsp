@@ -5,8 +5,9 @@
 PARAMETERS
   id: ID of file.
   video: Whether the file is a video (default false).
-  playEnabled: Whether the current user is allowed to play songs (default true).
-  addEnabled: Whether the current user is allowed to add songs to the playlist (default true).
+  playEnabled: Whether to show play button (default true).
+  addEnabled: Whether to show add next/last buttons (default true).
+  downloadEnabled: Whether to show download button (default false).
   starEnabled: Whether to show star/unstar controls (default false).
   starred: Whether the file is currently starred.
   asTable: Whether to put the images in td tags.
@@ -39,7 +40,7 @@ PARAMETERS
                      title="<fmt:message key="common.play"/>"></a>
         </c:when>
         <c:otherwise>
-            <a href="javascript:noop()" onclick="top.playQueue.onPlay(${param.id});">
+            <a href="#" onclick="top.playQueue.onPlay(${param.id}); return false;">
                 <img src="<spring:theme code="playImage"/>" alt="<fmt:message key="common.play"/>"
                      title="<fmt:message key="common.play"/>"></a>
         </c:otherwise>
@@ -49,7 +50,7 @@ PARAMETERS
 
 <c:if test="${param.asTable}"><td></c:if>
 <c:if test="${(empty param.addEnabled or param.addEnabled) and not param.video}">
-    <a href="javascript:noop()" onclick="top.playQueue.onAdd(${param.id});">
+    <a href="#" onclick="top.playQueue.onAdd(${param.id}); return false;">
         <img id="add${param.id}" src="<spring:theme code="addImage"/>" alt="<fmt:message key="main.addlast"/>"
              title="<fmt:message key="main.addlast"/>"></a>
 </c:if>
@@ -57,8 +58,18 @@ PARAMETERS
 
 <c:if test="${param.asTable}"><td></c:if>
 <c:if test="${(empty param.addEnabled or param.addEnabled) and not param.video}">
-    <a href="javascript:noop()" onclick="top.playQueue.onAddNext(${param.id});">
+    <a href="#" onclick="top.playQueue.onAddNext(${param.id}); return false;">
         <img id="add${param.id}" src="<spring:theme code="addNextImage"/>" alt="<fmt:message key="main.addnext"/>"
              title="<fmt:message key="main.addnext"/>"></a>
+</c:if>
+<c:if test="${param.asTable}"></td></c:if>
+
+<c:if test="${param.asTable}"><td></c:if>
+<c:if test="${param.downloadEnabled}">
+    <sub:url value="/download.view" var="downloadUrl">
+        <sub:param name="id" value="${param.id}"/>
+    </sub:url>
+    <a href="${downloadUrl}">
+        <img src="<spring:theme code="downloadImage"/>" alt="<fmt:message key="common.download"/>" title="<fmt:message key="common.download"/>"></a>
 </c:if>
 <c:if test="${param.asTable}"></td></c:if>

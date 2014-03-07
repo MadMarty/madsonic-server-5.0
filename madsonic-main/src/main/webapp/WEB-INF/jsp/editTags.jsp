@@ -103,7 +103,7 @@
         } else {
             message = "<div class='warning'><fmt:message key="edittags.error"/></div>"
             var errors = dwr.util.getValue("errors");
-            errors += result + "<br/>";
+            errors += "<br>" + result + "<br>";
             dwr.util.setValue("errors", errors, { escapeHtml:false });
         }
         dwr.util.setValue("status" + index, message, { escapeHtml:false });

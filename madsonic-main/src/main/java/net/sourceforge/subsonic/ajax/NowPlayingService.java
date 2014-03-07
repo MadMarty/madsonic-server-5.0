@@ -18,6 +18,7 @@
  */
 package net.sourceforge.subsonic.ajax;
 
+import net.sourceforge.subsonic.Logger;
 import net.sourceforge.subsonic.domain.AvatarScheme;
 import net.sourceforge.subsonic.domain.MediaFile;
 import net.sourceforge.subsonic.domain.Player;
@@ -32,15 +33,14 @@ import net.sourceforge.subsonic.service.metadata.MetaData;
 import net.sourceforge.subsonic.service.metadata.MetaDataParser;
 import net.sourceforge.subsonic.service.metadata.MetaDataParserFactory;
 import net.sourceforge.subsonic.util.StringUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,6 +50,8 @@ import java.util.List;
  * @author Sindre Mehus
  */
 public class NowPlayingService {
+
+    private static final Logger LOG = Logger.getLogger(NowPlayingService.class);
 
     private PlayerService playerService;
     private StatusService statusService;
@@ -78,7 +80,12 @@ public class NowPlayingService {
      * @return Details about what all users are currently playing.
      */
     public List<NowPlayingInfo> getNowPlaying() throws Exception {
-        return convert(statusService.getAllStreamStatuses());
+        try {
+            return convert(statusService.getAllStreamStatuses());
+        } catch (Throwable x) {
+            LOG.error("Unexpected error in getNowPlaying: " + x, x);
+            return Collections.emptyList();
+        }
     }
 
     /**

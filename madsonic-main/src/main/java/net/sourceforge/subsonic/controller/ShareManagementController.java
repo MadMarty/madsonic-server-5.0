@@ -18,25 +18,28 @@
  */
 package net.sourceforge.subsonic.controller;
 
-import java.io.IOException;
+import net.sourceforge.subsonic.domain.MediaFile;
+import net.sourceforge.subsonic.domain.PlayQueue;
+import net.sourceforge.subsonic.domain.Player;
+import net.sourceforge.subsonic.domain.Share;
+import net.sourceforge.subsonic.service.MediaFileService;
+import net.sourceforge.subsonic.service.PlayerService;
+import net.sourceforge.subsonic.service.PlaylistService;
+import net.sourceforge.subsonic.service.SecurityService;
+import net.sourceforge.subsonic.service.SettingsService;
+import net.sourceforge.subsonic.service.ShareService;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import net.sourceforge.subsonic.domain.MediaFile;
-import net.sourceforge.subsonic.service.*;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-
-import net.sourceforge.subsonic.domain.Player;
-import net.sourceforge.subsonic.domain.PlayQueue;
-import net.sourceforge.subsonic.domain.Share;
 
 /**
  * Controller for sharing music on Twitter, Facebook etc.
@@ -103,21 +106,34 @@ public class ShareManagementController extends MultiActionController {
         
         map.put("dir", dir);
         map.put("user", securityService.getCurrentUser(request));
+
         Share share = shareService.createShare(request, files);
+        String description = getDescription(request);
+        if (description != null) {
+            share.setDescription(description);
+            shareService.updateShare(share);
+        }
+
         map.put("playUrl", shareService.getShareUrl(share));
         map.put("licenseInfo", settingsService.getLicenseInfo());
 
         return new ModelAndView("createShare", "model", map);
     }
 
-    private List<MediaFile> getMediaFiles(HttpServletRequest request) throws IOException {
-        String dir = request.getParameter("dir");
+    private String getDescription(HttpServletRequest request) throws ServletRequestBindingException {
+        Integer playlistId = ServletRequestUtils.getIntParameter(request, "playlist");
+        return playlistId == null ? null : playlistService.getPlaylist(playlistId).getName();
+    }
+
+    private List<MediaFile> getMediaFiles(HttpServletRequest request) throws Exception {
+        Integer id = ServletRequestUtils.getIntParameter(request, "id");
         String playerId = request.getParameter("player");
+        Integer playlistId = ServletRequestUtils.getIntParameter(request, "playlist");
 
         List<MediaFile> result = new ArrayList<MediaFile>();
 
-        if (dir != null) {
-            MediaFile album = mediaFileService.getMediaFile(dir);
+        if (id != null) {
+            MediaFile album = mediaFileService.getMediaFile(id);
             int[] indexes = ServletRequestUtils.getIntParameters(request, "i");
             if (indexes.length == 0) {
                 return Arrays.asList(album);
@@ -126,14 +142,16 @@ public class ShareManagementController extends MultiActionController {
             for (int index : indexes) {
                 result.add(children.get(index));
             }
-        } else if (playerId != null) {
+        }
+
+        else if (playerId != null) {
             Player player = playerService.getPlayerById(playerId);
             PlayQueue playQueue = player.getPlayQueue();
-            List<MediaFile> result1;
-            synchronized (playQueue) {
-                result1 = playQueue.getFiles();
-            }
-            result = result1;
+            result = playQueue.getFiles();
+        }
+
+        else if (playlistId != null) {
+            result = playlistService.getFilesInPlaylist(playlistId);
         }
 
         return result;
@@ -159,9 +177,7 @@ public class ShareManagementController extends MultiActionController {
         this.securityService = securityService;
     }
 
-
-
-	public void setPlaylistService(PlaylistService playlistService) {
-		this.playlistService = playlistService;
-	}
+    public void setPlaylistService(PlaylistService playlistService) {
+        this.playlistService = playlistService;
+    }
 }

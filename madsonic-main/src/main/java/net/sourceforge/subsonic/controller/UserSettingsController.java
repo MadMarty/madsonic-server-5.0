@@ -28,9 +28,7 @@ import net.sourceforge.subsonic.service.*;
 import net.sourceforge.subsonic.domain.*;
 import net.sourceforge.subsonic.command.*;
 
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.*;
-import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.bind.*;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.log.Log;

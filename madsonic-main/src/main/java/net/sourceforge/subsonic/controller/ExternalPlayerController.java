@@ -96,7 +96,7 @@ public class ExternalPlayerController extends ParameterizableViewController {
             map.put("coverArt", coverArts.get(0));
         }
         map.put("redirectFrom", settingsService.getSubsonicUrl());
-        map.put("player", getPlayer(request).getId());
+        map.put("player", playerService.getGuestPlayer(request).getId());
 
         ModelAndView result = super.handleRequestInternal(request, response);
         result.addObject("model", map);

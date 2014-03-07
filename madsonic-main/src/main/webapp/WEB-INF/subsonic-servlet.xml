@@ -169,9 +169,9 @@
         <property name="mediaFileService" ref="mediaFileService"/>
         <property name="shareService" ref="shareService"/>
         <property name="playerService" ref="playerService"/>
-        <property name="securityService" ref="securityService"/>
         <property name="playlistService" ref="playlistService"/>
-	</bean>
+        <property name="securityService" ref="securityService"/>
+    </bean>
     <bean id="setRatingController" class="net.sourceforge.subsonic.controller.SetRatingController">
         <property name="ratingService" ref="musicInfoService"/>
         <property name="mediaFileService" ref="mediaFileService"/>
@@ -513,7 +513,7 @@
         <property name="mediaFileService" ref="mediaFileService"/>
         <property name="musicIndexService" ref="musicIndexService"/>
     </bean>
-    <bean id="restController" class="net.sourceforge.subsonic.controller.RESTController">
+    <bean id="restController" class="net.sourceforge.subsonic.controller.RESTController" init-method="init">
         <property name="settingsService" ref="settingsService"/>
         <property name="securityService" ref="securityService"/>
         <property name="playerService" ref="playerService"/>
@@ -679,14 +679,12 @@
         <property name="defaultResourceBundle" value="net.sourceforge.subsonic.theme.default"/>
     </bean>
 
-    <bean id="localeResolver"
-          class="net.sourceforge.subsonic.i18n.SubsonicLocaleResolver">
+    <bean id="localeResolver" class="net.sourceforge.subsonic.i18n.SubsonicLocaleResolver">
         <property name="securityService" ref="securityService"/>
         <property name="settingsService" ref="settingsService"/>
     </bean>
 
-    <bean id="themeResolver"
-          class="net.sourceforge.subsonic.theme.SubsonicThemeResolver">
+    <bean id="themeResolver" class="net.sourceforge.subsonic.theme.SubsonicThemeResolver">
         <property name="securityService" ref="securityService"/>
         <property name="settingsService" ref="settingsService"/>
     </bean>

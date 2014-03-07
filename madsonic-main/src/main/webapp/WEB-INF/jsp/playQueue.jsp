@@ -435,7 +435,7 @@
                 $("#starSong" + id).attr("src", "<spring:theme code='ratingOffImage'/>");
             } 
 			
-			$("#currentIndex" + id).html(i);
+	    $("#currentIndex" + id).html(i);
             $("#currentIndex" + id).hide();
 			
             if ($("#currentImage" + id) && song.streamUrl == currentStreamUrl) {
@@ -598,6 +598,7 @@ function skip(index) {
 
     <!-- actionSelected() is invoked when the users selects from the "More actions..." combo box. -->
     function actionSelected(id) {
+        var selectedIndexes = getSelectedIndexes();
         if (id == "top") {
             return;
         } else if (id == "savePlaylist") {
@@ -618,9 +619,9 @@ function skip(index) {
             selectAll(false);
         } else if (id == "removeSelected") {
             onRemoveSelected();
-        } else if (id == "download") {
-            location.href = "download.view?player=${model.player.id}&" + getSelectedIndexes();
-        } else if (id == "appendPlaylist") {
+        } else if (id == "download" && selectedIndexes != "") {
+            location.href = "download.view?player=${model.player.id}&" + selectedIndexes;
+        } else if (id == "appendPlaylist" && selectedIndexes != "") {
             onAppendPlaylist();
         }
         $("#moreActions").prop("selectedIndex", 0);

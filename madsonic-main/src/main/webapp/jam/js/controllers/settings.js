@@ -60,7 +60,7 @@ function SettingsCtrl($scope, $routeParams, $location, utils, globals, json, not
     $scope.setupDemo = function () {
         var Username = "android-guest";
         var Password = "guest";
-        var Server = "http://subsonic.org/demo";
+        var Server = "http://demo.subsonic.org";
         var Tab = "tabLibrary";
         if (utils.confirmDelete("Do you want to connect to the Subsonic Demo server?")) {
             globals.settings.Username = Username;

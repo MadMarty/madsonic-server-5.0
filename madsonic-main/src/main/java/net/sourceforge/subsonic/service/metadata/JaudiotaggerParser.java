@@ -70,6 +70,7 @@ public class JaudiotaggerParser extends MetaDataParser {
     private static final Logger LOG = Logger.getLogger(JaudiotaggerParser.class);
     private static final Pattern GENRE_PATTERN = Pattern.compile("\\((\\d+)\\).*");
     private static final Pattern TRACK_NUMBER_PATTERN = Pattern.compile("(\\d+)/\\d+");
+    private static final Pattern YEAR_NUMBER_PATTERN = Pattern.compile("(\\d{4}).*");
 
     static {
         try {
@@ -95,9 +96,6 @@ public class JaudiotaggerParser extends MetaDataParser {
             AudioFile audioFile = AudioFileIO.read(file);
             Tag tag = audioFile.getTag();
             if (tag != null) {
-
-            	metaData.setArtist(getTagField(tag, FieldKey.ARTIST)) ;
-                metaData.setAlbumArtist(getTagField(tag, FieldKey.ALBUM_ARTIST));
                 metaData.setAlbumName(getTagField(tag, FieldKey.ALBUM));
                 metaData.setTitle(getTagField(tag, FieldKey.TITLE));
 				metaData.setLyrics(getTagField(tag, FieldKey.LYRICS));
@@ -108,7 +106,7 @@ public class JaudiotaggerParser extends MetaDataParser {
 				
                 int getYear = parseYear(getTagField(tag, FieldKey.YEAR));
                 if (getYear != -1) {
-                metaData.setYear(getYear);
+	                metaData.setYear(getYear);
                 }
               
                // MP3File f = (MP3File) AudioFileIO.read(file);
@@ -178,7 +176,12 @@ public class JaudiotaggerParser extends MetaDataParser {
                 
                 metaData.setDiscNumber(parseInteger(getTagField(tag, FieldKey.DISC_NO)));
                 metaData.setTrackNumber(parseTrackNumber(getTagField(tag, FieldKey.TRACK)));
-        }
+
+                String songArtist = getTagField(tag, FieldKey.ARTIST);
+                String albumArtist = getTagField(tag, FieldKey.ALBUM_ARTIST);
+                metaData.setArtist(StringUtils.isBlank(songArtist) ? albumArtist : songArtist);
+                metaData.setAlbumArtist(StringUtils.isBlank(albumArtist) ? songArtist : albumArtist);
+            }
 
             AudioHeader audioHeader = audioFile.getAudioHeader();
             if (audioHeader != null) {
@@ -252,28 +255,6 @@ public class JaudiotaggerParser extends MetaDataParser {
         return true;
     }    
     
-    
-    public static int parseYear(String strdate) {
-    	
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
-        Date date = null;
-		try {
-			date = formatter.parse(strdate);
-	        int result = -1;
-	        if (date != null) {
-	            Calendar cal = Calendar.getInstance();
-	            cal.setTime(date);
-	            result = cal.get(Calendar.YEAR);
-	        }
-	        return result;
-	        
-        } catch (Exception x) {
-            // Ignored.
-            return -1;
-        }
-    }    
-   
-    
     private String getTagField(Tag tag, FieldKey fieldKey) {
         try {
             return StringUtils.trimToNull(tag.getFirst(fieldKey));
@@ -338,6 +319,32 @@ public class JaudiotaggerParser extends MetaDataParser {
         return result;
     }
 
+    private Integer parseYear(String year) {
+        if (year == null) {
+            return null;
+        }
+
+        Integer result = null;
+
+        try {
+            result = new Integer(year);
+        } catch (NumberFormatException x) {
+            Matcher matcher = YEAR_NUMBER_PATTERN.matcher(year);
+            if (matcher.matches()) {
+                try {
+                    result = Integer.valueOf(matcher.group(1));
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+        }
+
+        if (Integer.valueOf(0).equals(result)) {
+            return null;
+        }
+        return result;
+    }
+
     private Integer parseInteger(String s) {
         s = StringUtils.trimToNull(s);
         if (s == null) {
@@ -368,11 +375,15 @@ public class JaudiotaggerParser extends MetaDataParser {
             Tag tag = audioFile.getTagOrCreateAndSetDefault();
 
             tag.setField(FieldKey.ARTIST, StringUtils.trimToEmpty(metaData.getArtist()));
-            tag.setField(FieldKey.ALBUM_ARTIST, StringUtils.trimToEmpty(metaData.getAlbumArtist()));
+            tag.setField(FieldKey.MOOD, StringUtils.trimToEmpty(metaData.getMood()));
             tag.setField(FieldKey.ALBUM, StringUtils.trimToEmpty(metaData.getAlbumName()));
             tag.setField(FieldKey.TITLE, StringUtils.trimToEmpty(metaData.getTitle()));
             tag.setField(FieldKey.GENRE, StringUtils.trimToEmpty(metaData.getGenre()));
-            tag.setField(FieldKey.MOOD, StringUtils.trimToEmpty(metaData.getMood()));
+            try {
+                tag.setField(FieldKey.ALBUM_ARTIST, StringUtils.trimToEmpty(metaData.getAlbumArtist()));
+            } catch (Exception x) {
+                // Silently ignored. ID3v1 doesn't support album artist.
+            }
 
             Integer track = metaData.getTrackNumber();
             if (track == null) {

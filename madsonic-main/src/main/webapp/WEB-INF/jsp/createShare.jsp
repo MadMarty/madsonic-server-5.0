@@ -7,7 +7,10 @@
 </head>
 <body class="mainframe bgcolor1">
 
-<h1><fmt:message key="share.title"/></h1>
+<h1>
+    <img src="<spring:theme code="shareImage"/>" alt="">
+    <span style="vertical-align: middle;font-size: 14pt;"><fmt:message key="share.title"/></span>
+</h1>
 
 <c:choose>
     <c:when test="${model.urlRedirectionEnabled}">

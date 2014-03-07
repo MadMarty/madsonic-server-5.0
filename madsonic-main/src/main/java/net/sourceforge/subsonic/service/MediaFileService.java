@@ -1084,16 +1084,16 @@ public class MediaFileService {
 				try {
 					lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				LOG.warn("## error reading commentfile: " + commentFile);
+//				e.printStackTrace();
 				}
 				
 				if (lines == null){
 					try {
 						lines = Files.readAllLines(path, StandardCharsets.ISO_8859_1);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						LOG.warn("## error reading commentfile: " + commentFile);
+//						e.printStackTrace();
 					}
 				}
 				

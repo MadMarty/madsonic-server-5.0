@@ -1,21 +1,22 @@
 <%--@elvariable id="model" type="java.util.Map"--%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="iso-8859-1" %>
+
 <html>
 <head>
     <%@ include file="head.jsp" %>
     <script type="text/javascript" src="<c:url value="/script/swfobject.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/script/prototype.js"/>"></script>
 
-    <sub:url value="/coverArt.view" var="coverArtUrl">
-        <c:if test="${not empty model.coverArt}">
-            <sub:param name="path" value="${model.coverArt.path}"/>
-        </c:if>
-        <sub:param name="size" value="200"/>
-    </sub:url>
-
     <meta name="og:title" content="${fn:escapeXml(model.songs[0].artist)} &mdash; ${fn:escapeXml(model.songs[0].albumName)}"/>
     <meta name="og:type" content="album"/>
-    <meta name="og:image" content="${model.redirectFrom}${coverArtUrl}"/>
+
+    <c:if test="${not empty model.songs}">
+        <sub:url value="/coverArt.view" var="coverArtUrl">
+            <sub:param name="id" value="${model.songs[0].id}"/>
+            <sub:param name="size" value="500"/>
+    </sub:url>
+        <meta name="og:image" content="http://${model.redirectFrom}${coverArtUrl}"/>
+    </c:if>
 
 	<script type="text/javascript">
 	var is_android = false;
@@ -66,17 +67,15 @@
         <c:forEach items="${model.songs}" var="song" varStatus="loopStatus">
         <%--@elvariable id="song" type="net.sourceforge.subsonic.domain.MediaFile"--%>
         <sub:url value="/stream" var="streamUrl">
-            <sub:param name="path" value="${song.path}"/>
+            <sub:param name="id" value="${song.id}"/>
             <sub:param name="player" value="${model.player}"/>
         </sub:url>
         <sub:url value="/coverArt.view" var="coverUrl">
-           <sub:param name="size" value="500"/>
-           <c:if test="${not empty model.coverArts[loopStatus.count - 1]}">
-              <sub:param name="path" value="${model.coverArts[loopStatus.count - 1].path}"/>
-           </c:if>
+            <sub:param name="id" value="${song.id}"/>
+            <sub:param name="size" value="500"/>
         </sub:url>
 
-           <!-- TODO: Use video provider for aac, m4a -->
+            // TODO: Use video provider for aac, m4a
             list[${loopStatus.count - 1}] = {
                 file: "${streamUrl}",
                 image: "${coverUrl}",
@@ -102,9 +101,9 @@
 <body class="mainframe bgcolor1" style="padding-top:2em" onload="init();">
 
 <div style="margin:auto;width:500px">
-    <h1 >${model.songs[0].artist}</h1>
+    <h1 >${empty model.share.description ? model.songs[0].artist : fn:escapeXml(model.share.description)}</h1>
     <div style="float:left;padding-right:1.5em">
-        <h2 style="margin:0;">${model.songs[0].albumName}</h2>
+        <h2 style="margin:0;">${empty model.share.description ? model.songs[0].albumName : model.share.username}</h2>
     </div>
     <div class="detail" style="float:right">Streaming by <a href="http://madsonic.org/" target="_blank"><b>Madsonic</b></a></div>
 
@@ -113,7 +112,6 @@
             <a href="http://www.adobe.com/go/getflashplayer" target="_blank"><fmt:message key="playlist.getflash"/></a>
         </div>
     </div>
-    <div style="padding-top: 2em">${fn:escapeXml(model.share.description)}</div>
 </div>
 </body>
 </html>

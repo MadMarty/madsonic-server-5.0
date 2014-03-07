@@ -56,7 +56,7 @@ import net.sourceforge.subsonic.util.Util;
 public class TranscodingService {
 
     private static final Logger LOG = Logger.getLogger(TranscodingService.class);
-    private static final String FORMAT_RAW = "raw";
+    public static final String FORMAT_RAW = "raw";
 
     private TranscodingDao transcodingDao;
     private SettingsService settingsService;
@@ -199,7 +199,7 @@ public class TranscodingService {
         hashClientsFormats.put("ISUB", Arrays.asList("MP3", "AAC", "M4A", "OGG")); // , "FLAC"));
         hashClientsFormats.put("DSUB", Arrays.asList("MP3", "AAC", "M4A", "OGG")); //, "FLAC"));
         hashClientsFormats.put("ANDROID", Arrays.asList("MP3", "AAC", "M4A", "OGG")); //, "FLAC"));
-        hashClientsFormats.put("MADSONIC", Arrays.asList("MP3", "AAC", "M4A", "OGG")); //, "FLAC"));
+        hashClientsFormats.put("MADSONIC", Arrays.asList("MP3", "AAC", "M4A", "OGG", "OGA")); //, "FLAC"));
         hashClientsFormats.put("THUMPER", Arrays.asList("MP3", "AAC", "M4A"));
         hashClientsFormats.put("SUBWIJI", Arrays.asList("MP3"));
         

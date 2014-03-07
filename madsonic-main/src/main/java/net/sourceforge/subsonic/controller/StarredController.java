@@ -18,20 +18,23 @@
  */
 package net.sourceforge.subsonic.controller;
 
-import net.sourceforge.subsonic.service.PlaylistService;
 import net.sourceforge.subsonic.dao.MediaFileDao;
+import net.sourceforge.subsonic.domain.CoverArtScheme;
 import net.sourceforge.subsonic.domain.MediaFile;
 import net.sourceforge.subsonic.domain.User;
 import net.sourceforge.subsonic.domain.UserSettings;
 import net.sourceforge.subsonic.service.MediaFileService;
 import net.sourceforge.subsonic.service.PlayerService;
+import net.sourceforge.subsonic.service.PlaylistService;
 import net.sourceforge.subsonic.service.SecurityService;
 import net.sourceforge.subsonic.service.SettingsService;
+
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +51,7 @@ public class StarredController extends ParameterizableViewController {
     private SecurityService securityService;
     private SettingsService settingsService;
     private MediaFileService mediaFileService;
-    private PlaylistService playlistService;	
+	private PlaylistService playlistService;
 
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -73,6 +76,7 @@ public class StarredController extends ParameterizableViewController {
         map.put("artists", artists);
         map.put("albums", albums);
         map.put("songs", songs);
+        map.put("coverArtSize", CoverArtScheme.SMALL.getSize());
         ModelAndView result = super.handleRequestInternal(request, response);
         result.addObject("model", map);
         return result;

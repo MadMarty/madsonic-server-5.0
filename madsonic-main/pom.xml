@@ -45,7 +45,7 @@
         <id>4thline.org-repo</id>
         <url>http://4thline.org/m2</url>
         <snapshots>
-            <enabled>true</enabled> <!-- Or 'true', if you want -->
+            <enabled>true</enabled> 
         </snapshots>
     </repository>
 	</repositories>
@@ -183,13 +183,7 @@
             <version>${version.hsqldb}</version>
             <scope>runtime</scope>
         </dependency>
-<!--		
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.2.9</version>
-		</dependency>
--->		
+
         <dependency>
             <groupId>radeox</groupId>
             <artifactId>radeox</artifactId>
@@ -310,18 +304,6 @@
             <scope>test</scope>
         </dependency>
 
-<!--       <dependency>
-            <groupId>org.teleal.cling</groupId>
-            <artifactId>cling-core</artifactId>
-            <version>1.0.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.teleal.cling</groupId>
-            <artifactId>cling-support</artifactId>
-            <version>1.0.5</version>
-       </dependency> --> 
-		
         <dependency>
             <groupId>org.fourthline.cling</groupId>
             <artifactId>cling-core</artifactId>
@@ -376,9 +358,9 @@
 								<copy
 									file="${basedir}/src/main/resources/net/sourceforge/subsonic/i18n/ResourceBundle_en.properties"
 									tofile="${project.build.directory}/classes/net/sourceforge/subsonic/i18n/ResourceBundle.properties" />
-                                <echo file="${project.build.directory}/classes/build_number.txt">3830</echo>
+                                <echo file="${project.build.directory}/classes/version.txt">5.0.3860</echo>
+                                <echo file="${project.build.directory}/classes/build_number.txt">3860</echo>
                                 <echo file="${project.build.directory}/classes/build_date.txt">${DSTAMP}</echo>
-                                <echo file="${project.build.directory}/classes/version.txt">5.0.3830</echo>
 							</target>
 						</configuration>
 						<goals>

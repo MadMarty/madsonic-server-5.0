@@ -22,15 +22,16 @@ import net.sourceforge.subsonic.domain.PodcastEpisode;
 import net.sourceforge.subsonic.domain.PodcastStatus;
 import net.sourceforge.subsonic.service.PodcastService;
 import net.sourceforge.subsonic.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.List;
 
 /**
  * Controller for the "Podcast receiver" page.
@@ -49,7 +50,7 @@ public class PodcastReceiverAdminController extends AbstractController {
 
     private void handleParameters(HttpServletRequest request) {
         if (request.getParameter("add") != null) {
-            String url = request.getParameter("add");
+            String url = StringUtils.trim(request.getParameter("add"));
             podcastService.createChannel(url);
         }
         if (request.getParameter("downloadChannel") != null ||

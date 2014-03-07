@@ -33,6 +33,7 @@ import java.util.zip.CRC32;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.math.LongRange;
 import org.apache.http.util.EncodingUtils;
@@ -48,6 +49,7 @@ import net.sourceforge.subsonic.Logger;
 import net.sourceforge.subsonic.domain.MediaFile;
 import net.sourceforge.subsonic.domain.PlayQueue;
 import net.sourceforge.subsonic.domain.Player;
+import net.sourceforge.subsonic.domain.Playlist;
 import net.sourceforge.subsonic.domain.TransferStatus;
 import net.sourceforge.subsonic.domain.User;
 import net.sourceforge.subsonic.io.RangeOutputStream;
@@ -81,7 +83,7 @@ public class DownloadController implements Controller, LastModified {
 
     public long getLastModified(HttpServletRequest request) {
         try {
-            MediaFile mediaFile = getSingleFile(request);
+            MediaFile mediaFile = getMediaFile(request);
             if (mediaFile == null || mediaFile.isDirectory() || mediaFile.getChanged() == null) {
                 return -1;
             }
@@ -98,11 +100,10 @@ public class DownloadController implements Controller, LastModified {
 
             status = statusService.createDownloadStatus(playerService.getPlayer(request, response, false, false));
 
-            MediaFile mediaFile = getSingleFile(request);
-            String dir = request.getParameter("dir");
+            MediaFile mediaFile = getMediaFile(request);
             Integer playlistId = ServletRequestUtils.getIntParameter(request, "playlist");
             String playerId = request.getParameter("player");
-            int[] indexes = ServletRequestUtils.getIntParameters(request, "i");
+            int[] indexes = request.getParameter("i") == null ? null : ServletRequestUtils.getIntParameters(request, "i");
 
             if (mediaFile != null) {
                 response.setIntHeader("ETag", mediaFile.getId());
@@ -116,36 +117,25 @@ public class DownloadController implements Controller, LastModified {
             }
 
             if (mediaFile != null) {
-                File file = mediaFile.getFile();
-                if (!securityService.isReadAllowed(file)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    return null;
-                }
-
-                if (file.isFile()) {
-                    downloadFile(response, status, file, range);
+                if (mediaFile.isFile()) {
+                    downloadFile(response, status, mediaFile.getFile(), range);
                 } else {
-                    downloadDirectory(response, status, file, range);
+                    List<MediaFile> children = mediaFileService.getChildrenOf(mediaFile, true, true, true);
+                    String zipFileName = FilenameUtils.getBaseName(mediaFile.getPath()) + ".zip";
+                    downloadFiles(response, status, children, indexes, range, zipFileName);
                 }
-            } else if (dir != null) {
-                File file = new File(dir);
-                if (!securityService.isReadAllowed(file)) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    return null;
-                }
-                downloadFiles(response, status, file, indexes);
 
             } else if (playlistId != null) {
                 List<MediaFile> songs = playlistService.getFilesInPlaylist(playlistId);
-                downloadFiles(response, status, songs, null, range);
+                Playlist playlist = playlistService.getPlaylist(playlistId);
+                downloadFiles(response, status, songs, null, range, playlist.getName() + ".zip");
 
             } else if (playerId != null) {
                 Player player = playerService.getPlayerById(playerId);
                 PlayQueue playQueue = player.getPlayQueue();
                 playQueue.setName("Playlist");
-                downloadFiles(response, status, playQueue.getFiles(), indexes.length == 0 ? null : indexes, range);
+                downloadFiles(response, status, playQueue.getFiles(), indexes, range, "download.zip");
             }
-
 
         } finally {
             if (status != null) {
@@ -158,16 +148,9 @@ public class DownloadController implements Controller, LastModified {
         return null;
     }
 
-    private MediaFile getSingleFile(HttpServletRequest request) throws ServletRequestBindingException {
-        String path = request.getParameter("path");
-        if (path != null) {
-            return mediaFileService.getMediaFile(path);
-        }
+    private MediaFile getMediaFile(HttpServletRequest request) throws ServletRequestBindingException {
         Integer id = ServletRequestUtils.getIntParameter(request, "id");
-        if (id != null) {
-            return mediaFileService.getMediaFile(id);
-        }
-        return null;
+        return id == null ? null : mediaFileService.getMediaFile(id);
     }
 
     /**
@@ -184,7 +167,7 @@ public class DownloadController implements Controller, LastModified {
         status.setFile(file);
 
         response.setContentType("application/x-download");
-        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''"+ encodeAsRFC5987(file.getName()));
+        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodeAsRFC5987(file.getName()));
         if (range == null) {
             Util.setContentLength(response, file.length());
         }
@@ -195,8 +178,8 @@ public class DownloadController implements Controller, LastModified {
 
     private String encodeAsRFC5987(String string) throws UnsupportedEncodingException {
         byte[] stringAsByteArray = string.getBytes("UTF-8");
-        char[] digits = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-        byte[] attrChar = {'!','#','$','&','+','-','.','^','_','`','|', '~','0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        char[] digits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        byte[] attrChar = {'!', '#', '$', '&', '+', '-', '.', '^', '_', '`', '|', '~', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
         StringBuilder sb = new StringBuilder();
         for (byte b : stringAsByteArray) {
             if (Arrays.binarySearch(attrChar, b) >= 0) {
@@ -273,23 +256,23 @@ public class DownloadController implements Controller, LastModified {
      * Downloads the given files.  The files are packed together in an
      * uncompressed zip-file.
      *
-     * @param response The HTTP response.
-     * @param status   The download status.
-     * @param files    The files to download.
-     * @param indexes  Only download songs at these indexes. May be <code>null</code>.
-     * @param range    The byte range, may be <code>null</code>.
+     * @param response    The HTTP response.
+     * @param status      The download status.
+     * @param files       The files to download.
+     * @param indexes     Only download songs at these indexes. May be <code>null</code>.
+     * @param range       The byte range, may be <code>null</code>.
+     * @param zipFileName The name of the resulting zip file.
      * @throws IOException If an I/O error occurs.
      */
-    private void downloadFiles(HttpServletResponse response, TransferStatus status, List<MediaFile> files, int[] indexes, LongRange range) throws IOException {
+    private void downloadFiles(HttpServletResponse response, TransferStatus status, List<MediaFile> files, int[] indexes, LongRange range, String zipFileName) throws IOException {
         if (indexes != null && indexes.length == 1) {
             downloadFile(response, status, files.get(indexes[0]).getFile(), range);
             return;
         }
 
-        String zipFileName = "download.zip";
         LOG.info("Starting to download '" + zipFileName + "' to " + status.getPlayer());
         response.setContentType("application/x-download");
-        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''"+ encodeAsRFC5987(zipFileName));
+        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodeAsRFC5987(zipFileName));
 
         ZipOutputStream out = new ZipOutputStream(RangeOutputStream.wrap(response.getOutputStream(), range));
         out.setMethod(ZipOutputStream.STORED);  // No compression.

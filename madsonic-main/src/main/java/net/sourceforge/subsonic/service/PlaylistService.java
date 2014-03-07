@@ -72,6 +72,10 @@ public class PlaylistService {
     private SecurityService securityService;
     private SettingsService settingsService;
 
+    public List<Playlist> getAllPlaylists() {
+        return playlistDao.getAllPlaylists();
+    }
+
     public List<Playlist> getReadablePlaylistsForUser(String username) {
     	
         // Admin users are allowed to modify all playlists that are visible to them.
@@ -92,10 +96,6 @@ public class PlaylistService {
         return playlistDao.getWritablePlaylistsForUser(username);
     }
 
-    public List<Playlist> getAllPlaylists() {
-    	return playlistDao.getAllPlaylists();
-    }
-    
     public Playlist getPlaylist(int id) {
         return playlistDao.getPlaylist(id);
     }

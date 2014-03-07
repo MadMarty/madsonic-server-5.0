@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="iso-8859-1"%>
 
-<html>
-<head>
+<html><head>
 <%@ include file="head.jsp" %>
 <script type="text/javascript">
 function fillBox(what)
@@ -10,7 +9,7 @@ function fillBox(what)
 	return false;
 }
 </script>
-</head><body class="mainframe bgcolor1">
+</head><body class="mainframe bgcolor1" onload="document.getElementById('query').focus()">
 <h1>Database query</h1>
 
 <div style="float:left; text-align:left; width: 100%; display: block;">
@@ -21,7 +20,7 @@ function fillBox(what)
 </div>
 <div style="float:left;">
 <form method="post" action="db.view" name="query">
-    <textarea rows="8" cols="140" name="query" style="margin-top:1em">${model.query}</textarea>
+    <textarea rows="10" cols="120" id="query" name="query" style="margin-top:1em">${model.query}</textarea>
     <input type="submit" value="<fmt:message key="common.ok"/>">
 </form>
 </div>
