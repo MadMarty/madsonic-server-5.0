@@ -127,7 +127,10 @@ public class CoverArtController implements Controller, LastModified {
         if (id.startsWith(ARTIST_COVERART_PREFIX)) {
             return createArtistCoverArtRequest(Integer.valueOf(id.replace(ARTIST_COVERART_PREFIX, "")));
         }
-        return createMediaFileCoverArtRequest(Integer.valueOf(id));
+        
+        int req = 0;
+        req = Integer.valueOf(id);
+        return createMediaFileCoverArtRequest(req);
     }
 
     private CoverArtRequest createAlbumCoverArtRequest(int id) {

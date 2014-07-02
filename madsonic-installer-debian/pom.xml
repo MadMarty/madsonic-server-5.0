@@ -37,7 +37,7 @@
                                         <copy todir="${project.build.directory}/deb">
                                             <fileset dir="${basedir}/src"/>
                                             <filterset>
-                                                <filter token="VERSION" value="3830"/>
+                                                <filter token="VERSION" value="3880"/>
                                             </filterset>
                                         </copy>
 

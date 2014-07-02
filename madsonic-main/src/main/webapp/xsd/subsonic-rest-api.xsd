@@ -4,7 +4,7 @@
            targetNamespace="http://madsonic.org/restapi"
            attributeFormDefault="unqualified"
            elementFormDefault="qualified"
-           version="1.10.2">
+           version="1.10.5">
 
     <xs:element name="subsonic-response" type="sub:Response"/>
 

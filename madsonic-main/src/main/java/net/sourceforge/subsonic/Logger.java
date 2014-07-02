@@ -45,8 +45,7 @@ public class Logger {
 	private String LogfileLevel;
 	private String category;
 
-	private static List<Entry> entries = Collections
-			.synchronizedList(new BoundedList<Entry>(512));
+	private static List<Entry> entries = Collections.synchronizedList(new BoundedList<Entry>(512));
 	private static PrintWriter writer;
 
 	/**

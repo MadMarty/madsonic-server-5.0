@@ -395,7 +395,7 @@ public class SearchService {
             BooleanQuery query = new BooleanQuery();
             query.add(new TermQuery(new Term(FIELD_MEDIA_TYPE, MediaFile.MediaType.MUSIC.name().toLowerCase())), BooleanClause.Occur.MUST);
             if (criteria.getGenre() != null) {
-                String genre = normalizeGenre(criteria.getGenre());
+                String genre = normalize(criteria.getGenre());
                 query.add(new TermQuery(new Term(FIELD_GENRE, genre)), BooleanClause.Occur.MUST);
             }
             if (criteria.getFromYear() != null || criteria.getToYear() != null) {
@@ -428,19 +428,18 @@ public class SearchService {
         return result;
     }
 
-    private static String normalizeGenre(String genre) {
-    	
+    public static String normalize(String genre) {
     	String tmp = genre.toLowerCase();
-    	
     	tmp = tmp.replace(" ", "");
     	tmp = tmp.replace(";", "");
     	tmp = tmp.replace(",", "");
     	tmp = tmp.replace("-", "");
     	tmp = tmp.replace("/", "");
+      	tmp = tmp.replace("[", "");
+      	tmp = tmp.replace("]", "");
+      	tmp = tmp.replace("+", "");
       	tmp = tmp.replace(" ", "");
-      	
     	return tmp;
-
     }
 
     /**
@@ -494,14 +493,14 @@ public class SearchService {
             queryMediaType.add(new TermQuery(new Term(FIELD_MEDIA_TYPE, MediaFile.MediaType.PODCAST.name().toLowerCase())), BooleanClause.Occur.SHOULD);
             
             if (criteria.getGenre() != null) {
-				String genre = normalizeGenre(criteria.getGenre());
+				String genre = normalize(criteria.getGenre());
             	queryGenre.add(new TermQuery(new Term(FIELD_GENRE, genre)), BooleanClause.Occur.SHOULD);
             }
             
         	if (criteria.getGenres() != null) {
             	for (String genre : criteria.getGenres()) {
             		if (genre != null) {
-						queryGenre.add(new TermQuery(new Term(FIELD_GENRE, normalizeGenre(genre))), BooleanClause.Occur.SHOULD);
+						queryGenre.add(new TermQuery(new Term(FIELD_GENRE, normalize(genre))), BooleanClause.Occur.SHOULD);
             			}
                 }
             }
@@ -824,7 +823,7 @@ public class SearchService {
                     doc.add(new Field(FIELD_ALBUM, mediaFile.getAlbumName(), Field.Store.YES, Field.Index.ANALYZED));
                 }
                 if (mediaFile.getGenre() != null) {
-                    doc.add(new Field(FIELD_GENRE, normalizeGenre(mediaFile.getGenre()), Field.Store.NO, Field.Index.ANALYZED));
+                    doc.add(new Field(FIELD_GENRE, normalize(mediaFile.getGenre()), Field.Store.NO, Field.Index.ANALYZED));
                 }
                 if (mediaFile.getMood() != null) {
                     doc.add(new Field(FIELD_MOOD, mediaFile.getMood(), Field.Store.NO, Field.Index.ANALYZED));

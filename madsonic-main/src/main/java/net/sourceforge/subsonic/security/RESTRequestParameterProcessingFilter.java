@@ -182,8 +182,9 @@ public class RESTRequestParameterProcessingFilter implements Filter {
 
         builder.preamble(StringUtil.ENCODING_UTF8);
         builder.add("subsonic-response", false,
-                    new XMLBuilder.Attribute("xmlns", "http://subsonic.org/restapi"),
+                    new XMLBuilder.Attribute("xmlns", "http://madsonic.org/restapi"),
                     new XMLBuilder.Attribute("status", "failed"),
+					new XMLBuilder.Attribute("type", "madsonic"),					
                     new XMLBuilder.Attribute("version", StringUtil.getRESTProtocolVersion()));
 
         builder.add("error", true,

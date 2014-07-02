@@ -104,10 +104,10 @@ public class JaudiotaggerParser extends MetaDataParser {
 					metaData.setHasLyrics(true);
 				}
 				
-                int getYear = parseYear(getTagField(tag, FieldKey.YEAR));
-                if (getYear != -1) {
-	                metaData.setYear(getYear);
-                }
+					int getYear = parseInteger(dateToYear(getTagField(tag, FieldKey.YEAR)));
+					if (getYear > 1000) {
+					   metaData.setYear(getYear);
+					}
               
                // MP3File f = (MP3File) AudioFileIO.read(file);
                 
@@ -319,6 +319,7 @@ public class JaudiotaggerParser extends MetaDataParser {
         return result;
     }
 
+    @Deprecated
     private Integer parseYear(String year) {
         if (year == null) {
             return null;
@@ -344,6 +345,55 @@ public class JaudiotaggerParser extends MetaDataParser {
         }
         return result;
     }
+    
+    /**
+     * Try and retrieve a valid year from a date tag, since most taggers put full release date
+     * Will only try to grab a different date if the length of the string is > 4
+     */
+    private String dateToYear(String date) {
+        if (date == null) {
+        	return "-1";}
+
+        	String yr = date;
+            if (date.length() > 4) {
+                    try {
+                            if (date.matches("^\\d{4}.*")) {
+                                    int i = Integer.parseInt(date.substring(0,4));
+                                    if (isValidYear(i)) {
+                                            yr = date.substring(0,4);
+                                    }
+                            }
+                            if (date.matches(".*\\d{4}$") && yr.equals(date)){
+                                    int i = Integer.parseInt(date.substring(date.length()-4));
+                                    if (isValidYear(i)) {
+                                            yr = date.substring(date.length()-4);
+                                    }
+                            }
+                    }
+                    catch (NumberFormatException nfe) {
+//                          Ignore NFEs
+//                          nfe.printStackTrace();
+                    }
+                    catch (NullPointerException npe) {
+//                      Ignore NPEs
+//                      npe.printStackTrace();
+                }
+            }
+            return yr;
+    }
+
+    /**
+     * Return true if integer appears to be a valid year
+     */
+    private boolean isValidYear(Integer i) {
+            boolean val = false;
+            if (i>1000 && i<2100) {
+                    val = true;
+            }
+            return val;
+    }
+    
+    
 
     private Integer parseInteger(String s) {
         s = StringUtils.trimToNull(s);
@@ -392,13 +442,12 @@ public class JaudiotaggerParser extends MetaDataParser {
                 tag.setField(FieldKey.TRACK, String.valueOf(track));
             }
 
-            Integer year = metaData.getYear();
-            if (year == null) {
+            if (metaData.getYear() == null) {
                 tag.deleteField(FieldKey.YEAR);
             } else {
-                tag.setField(FieldKey.YEAR, String.valueOf(year));
-            }
-
+                tag.setField(FieldKey.YEAR, String.valueOf(metaData.getYear()));
+            }			
+			
             audioFile.commit();
 
         } catch (Throwable x) {

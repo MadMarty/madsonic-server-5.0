@@ -201,7 +201,7 @@ public class SettingsService {
 
     
     // Madsonic Default values.
-    private static final String DEFAULT_INDEX_STRING  = "# ! A B C D E F G H I J K L M N O P Q R S T U V W X Y Z";
+    private static final String DEFAULT_INDEX_STRING  = "# ! 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z";
     private static final String DEFAULT_INDEX2_STRING = "# A-F(ABCDEF) G-L(GHIJKL) M-S(MNOPQRS) T-Z(TUVWXYZ)";
     private static final String DEFAULT_INDEX3_STRING = "# 0-9(0123456789) A-Z(ABCDEFGHIJKLMNOPQRSTUVWXYZ)";
     private static final String DEFAULT_INDEX4_STRING = "# A-M(ABCDEFGHIJKLM) N-Z(NOPQRSTUVWXYZ)";
@@ -287,7 +287,7 @@ public class SettingsService {
     private static final boolean DEFAULT_PLAYQUEUE_RESIZE = false;
     private static final boolean DEFAULT_LEFTFRAME_RESIZE = false;
     private static final int DEFAULT_PLAYQUEUE_SIZE = 215;
-    private static final int DEFAULT_LEFTFRAME_SIZE = 250;
+    private static final int DEFAULT_LEFTFRAME_SIZE = 255;
     private static final boolean DEFAULT_CUSTOMSCROLLBAR = true;
     private static final boolean DEFAULT_CUSTOMACCORDION = false;
     private static final boolean DEFAULT_DLNA_ENABLED = false;
@@ -1825,7 +1825,7 @@ public class SettingsService {
         settings.setChanged(new Date());
         settings.setListType(getListType());
         settings.setListRows(2);
-        settings.setListColumns(5);
+        settings.setListColumns(6);
 		settings.setPlayQueueResize(false);
 		settings.setLeftFrameResize(false);
 		settings.setCustomScrollbarEnabled(true);
@@ -1845,7 +1845,7 @@ public class SettingsService {
 
         UserSettings.Visibility main = settings.getMainVisibility();
         main.setCaptionCutoff(45);
-        main.setTrackNumberVisible(true);
+        main.setTrackNumberVisible(false);
         main.setArtistVisible(true);
         main.setDurationVisible(true);
         main.setGenreVisible(true);
