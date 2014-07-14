@@ -3,7 +3,7 @@
 # (/etc/init.d/madsonic)
 #
 # To change the startup parameters of Madsonic, modify
-# the SUBSONIC_ARGS variable below.
+# the MADSONIC_ARGS variable below.
 #
 # Type "madsonic --help" on the command line to read an
 # explanation of the different options.
@@ -12,9 +12,9 @@
 # and 443 (for https), and use a Java memory heap size of 350 MB, use
 # the following:
 #
-# SUBSONIC_ARGS="--port=80 --https-port=443 --max-memory=350"
+# MADSONIC_ARGS="--port=80 --https-port=443 --max-memory=350"
 
-SUBSONIC_ARGS="--init-memory=200 --max-memory=350"
+MADSONIC_ARGS="--init-memory=200 --max-memory=350"
 
 
 # The user which should run the Madsonic process. Default "root".
@@ -22,4 +22,4 @@ SUBSONIC_ARGS="--init-memory=200 --max-memory=350"
 # below 1024. Also make sure to grant the user write permissions in
 # the music directories, otherwise changing album art and tags will fail.
 
-SUBSONIC_USER=root
+MADSONIC_USER=root
