@@ -1,4 +1,4 @@
-madsonic-server-5.0
+madsonic-server
 ===================
 
-Madsonic Server 5.0 Build 3840
+Madsonic Server 
