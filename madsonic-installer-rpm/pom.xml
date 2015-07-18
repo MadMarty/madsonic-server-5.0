@@ -63,7 +63,7 @@
                                               todir="${project.build.directory}/rpm/SPECS">
                                             <filterset>
                                                 <filter token="VERSION" value="${project.version}"/>
-                                                <filter token="BUILD_NUMBER" value="3830"/>
+                                                <filter token="BUILD_NUMBER" value="3880"/>
                                             </filterset>
                                         </copy>
 
